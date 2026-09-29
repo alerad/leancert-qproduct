@@ -1,0 +1,34 @@
+name = "QProduct"
+version = "0.1.0"
+defaultTargets = ["QProduct", "QProductLeanCert"]
+# Local two-checkout development; see README before publishing.
+packagesDir = "../../leancert/.lake/packages"
+
+[[require]]
+name = "LeanCert"
+path = "../../leancert"
+
+[[lean_lib]]
+name = "QProduct"
+roots = ["QProduct"]
+precompileModules = false
+
+[[lean_lib]]
+name = "QProductLeanCert"
+roots = ["QProduct.LeanCert"]
+precompileModules = false
+
+[[lean_lib]]
+name = "Examples"
+roots = ["Examples.Basic", "Examples.PrimeLambda", "Examples.ConstantFactory"]
+precompileModules = false
+
+[[lean_lib]]
+name = "Tests"
+roots = ["Tests.Sparse", "Tests.Trust", "Tests.PublicAPI", "Tests.MathOnly"]
+precompileModules = false
+
+[[lean_lib]]
+name = "PrimeLambdaDigits"
+roots = ["Tests.PrimeLambdaDigits"]
+precompileModules = false

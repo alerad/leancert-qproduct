@@ -1,0 +1,39 @@
+name: QProduct
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          path: formalizations/leancert-qproduct
+      - uses: actions/checkout@v5
+        with:
+          repository: alerad/leancert
+          ref: a9a0a8b07964c6bb0343f7e1ea6ca14d58819798
+          path: leancert
+      - uses: leanprover/lean-action@v1
+        with:
+          lake-package-directory: leancert
+          build: false
+          test: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install lean-runtime==4.33.0
+      - name: Build mathematical and LeanCert surfaces, examples, and audits
+        working-directory: formalizations/leancert-qproduct
+        run: lake --no-cache build QProduct QProductLeanCert Examples Tests
+      - name: Verify high-precision prime constant
+        working-directory: formalizations/leancert-qproduct
+        run: lake --no-cache build PrimeLambdaDigits
+      - name: Check documentation examples
+        working-directory: formalizations/leancert-qproduct
+        run: python scripts/check_docs.py
+      - name: Check exact project context through Lean Runtime
+        working-directory: formalizations/leancert-qproduct
+        run: lean-runtime check --using . --offline Examples/PrimeLambda.lean
