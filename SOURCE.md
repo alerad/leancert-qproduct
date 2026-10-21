@@ -13,7 +13,7 @@ The `LeanCert.QProduct` namespace becomes `QProduct`; the
 `LeanCert.ConstantFactory` namespace becomes `QProduct.ConstantFactory`.
 The old `LeanCert` umbrella aliases are intentionally not recreated.
 Generic `QPoly`, Bernstein, integration, and directed-limit machinery remain
-in LeanCert. The extraction branch in that repository is
-`refactor/extract-qproduct`; its extraction commit
-`a9a0a8b07964c6bb0343f7e1ea6ca14d58819798` (with the q-product modules
-removed from LeanCert) is the revision CI builds against.
+in LeanCert. The removal from LeanCert landed as commit
+`a9a0a8b07964c6bb0343f7e1ea6ca14d58819798` (PR #125, branch
+`refactor/extract-qproduct`). This project depends on LeanCert's `v4.35.0` tag
+(`d3e7f686eb6bfdcbb987eeb931c0bab953e8f43e`), which contains that removal.

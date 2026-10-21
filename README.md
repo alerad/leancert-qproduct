@@ -14,35 +14,25 @@ prime-indexed limiting constants, and perturbation observers.
 Declarations use `QProduct.*` and `QProduct.ConstantFactory.*`, not the former
 `LeanCert.QProduct.*` / `LeanCert.ConstantFactory.*` namespaces.
 
-## Local development
+## Setup
 
-Initialized with Lean Runtime, pinned to Lean/Mathlib **4.34.0** to match
-LeanCert. This initial extraction intentionally uses the sibling checkout:
-
-```text
-research/
-  leancert/
-  formalizations/
-    leancert-qproduct/
-```
-
-`lakefile.toml` requires `../../leancert`. The exact inherited Mathlib pins in
-`lake-manifest.json` match that checkout; `packagesDir` reuses its dependency
-cache. LeanCert does **not** depend on this project. No local source links or
-copied LeanCert implementation modules are needed.
+Pinned to Lean/Mathlib **4.35.0**. LeanCert is a Git dependency pinned to its
+`v4.35.0` tag (`d3e7f686`), the first release without the q-product modules;
+`lake-manifest.json` records the exact revisions. LeanCert does **not** depend
+on this project.
 
 ```sh
-lake --no-cache build
-lake --no-cache build Examples Tests
-lake --no-cache build PrimeLambdaDigits
+lake exe cache get
+lake build
+lake build Examples Tests
+lake build PrimeLambdaDigits
 lean-runtime check --using . --offline Examples/PrimeLambda.lean
 python3 scripts/check_docs.py
 ```
 
-For this two-checkout setup, Lake builds reuse the sibling's existing cache.
-`lean-runtime build` is also supported, but its shared-dependency preparation
-may create a separate cache and rebuild dependencies. Lean Runtime's explicit
-project check above uses the exact pinned context rather than discovery.
+To develop against a local LeanCert checkout, temporarily replace the `git`/`rev`
+lines of the LeanCert requirement with `path = "../../leancert"` and run
+`lake update LeanCert`; do not commit that change.
 
 `PrimeLambdaDigits` is the optional expensive 26-decimal-place enclosure.
 `Tests` includes sparse/powerset agreement, the smaller digit certificate,
@@ -62,14 +52,11 @@ example : ((19 / 36 : ℚ) : ℝ) ≤ primeLambda ∧
     1 (19 / 36) (7 / 12) (by native_decide)
 ```
 
-## Publishing
+## Upgrading LeanCert
 
-This project has not been published and has no configured remote. Before a
-standalone release, replace the local LeanCert path with an exact Git revision
-containing the extraction, remove the shared `packagesDir` setting, and
-regenerate the manifest. CI currently provisions the documented two-checkout
-layout against the LeanCert extraction commit recorded in `SOURCE.md`; update
-that pin to the merged revision if the branch is squashed or rebased.
+Move to a newer LeanCert release by changing `rev` in `lakefile.toml` to its tag
+and running `lake update LeanCert`. Keep the toolchain equal to LeanCert's, so
+the inherited Mathlib pin and cache stay consistent.
 
 ## Documentation
 

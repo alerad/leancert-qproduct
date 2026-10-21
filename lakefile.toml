@@ -1,12 +1,11 @@
 name = "QProduct"
 version = "0.1.0"
 defaultTargets = ["QProduct", "QProductLeanCert"]
-# Local two-checkout development; see README before publishing.
-packagesDir = "../../leancert/.lake/packages"
 
 [[require]]
 name = "LeanCert"
-path = "../../leancert"
+git = "https://github.com/alerad/leancert.git"
+rev = "v4.35.0"
 
 [[lean_lib]]
 name = "QProduct"
