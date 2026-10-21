@@ -20,6 +20,9 @@ def main():
                 else:
                     body.append(line)
             blocks.append((f'{path.relative_to(ROOT)} block {i}', '\n'.join(body)))
+    # Doc examples may import dependency modules outside this package's build closure.
+    modules = sorted(line.split()[1] for line in imports)
+    subprocess.run(['lake', '--no-cache', 'build', *modules], cwd=ROOT, check=True)
     source = '\n'.join(sorted(imports)) + '\nopen QProduct QProduct.ConstantFactory\n'
     for i, (label, body) in enumerate(blocks):
         source += f'\n-- {label}\nnamespace DocBlock{i}\n{body}\nend DocBlock{i}\n'
